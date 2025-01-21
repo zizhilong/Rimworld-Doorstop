@@ -1,12 +1,19 @@
-# Rimworld Doorstop
+# Rimworld Mod热更新
 
 Companion implementation to [Unity Doorstop](https://github.com/NeighTools/UnityDoorstop).
 
 <img src="https://github.com/pardeike/Rimworld-Doorstop/assets/853584/8fb30d47-63ad-42b6-94ae-93377ad7948e" width="320" />
 
-# Why use it
+# 功能说明
+本项目基于开源项目Rimworld Doorstop,补全了未完成的部分逻辑
+本项目通过Unity Doorstop预先启动,并重写了RimworldMod载入逻辑,避免了Dll文件被占用.
+通过监听Dll更新,将会通过HarmonyLib对原有mod中的方法进行Patch操作.
+需要将需要热更新的方法加上
+**[Reloadable]**
+描述符
 
-RimWorld uses Unity and the debugger server in Unity isn't available by default. Unity Doorstop fixes this and needs at least some default implementation to run. This project gives you a Doorstop.dll that you can use and has the added benefit of hot-reloading methods that are annotated with the attribute `[Reloadable]`. You can create this attribute in your own code base like this:
+
+本项目目前可以实现DLL动态替换.但是没有经过大规模测试,存在兼容性问题.欢迎PR
 
 ```cs
 [AttributeUsage(AttributeTargets.Constructor | AttributeTargets.Method)]
@@ -61,11 +68,11 @@ debug_address=127.0.0.1:56000
 debug_suspend=false
 ```
 
-Important: Make sure you compile your mod in `Debug` mode so you get `ModName.dll` and `ModName.pdb` into the Mod folder (and please don't release your mod like this!). 
+Important: Make sure you compile your mod in `Debug` mode so you get `ModName.dll` and `ModName.pdb` into the Mod folder (and please don't release your mod like this!).
 
-Now start the game, then use [dnSpy](https://github.com/dnSpyEx/dnSpy) and open the game dll (usually at `"C:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Assembly-CSharp.dll"`) and the mod dll you want to debug (usually in `"C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\ModName\.....\ModName.dll"`. 
+Now start the game, then use [dnSpy](https://github.com/dnSpyEx/dnSpy) and open the game dll (usually at `"C:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Assembly-CSharp.dll"`) and the mod dll you want to debug (usually in `"C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\ModName\.....\ModName.dll"`.
 
-You can also use Visual Studio but you won't be able to set breakpoints in RimWorld code. 
+You can also use Visual Studio but you won't be able to set breakpoints in RimWorld code.
 
 Finally, attach to the Unity debugger that runs inside RimWorld (use localhost or 127.0.0.1 and the port you configured in the .ini file) and you should be able to set breakpoints in RimWorld code and in your mod code too.
 
